@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 配置数据源工厂 -->
+    <bean id="dsf" class="org.jfaster.mango.datasource.SimpleDataSourceFactory">
+        <property name="name" value="dataSource"/>
+        <property name="dataSource" >
+
+            <bean class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+                <property name="url" value="${druid.db.url}"/>
+                <property name="username" value="${druid.db.username}"/>
+                <property name="password" value="${druid.db.password}"/>
+                <property name="initialSize" value="${druid.db.initialSize}"/>
+                <property name="minIdle" value="${druid.db.minIdle}"/>
+                <property name="maxActive" value="${druid.db.maxActive}"/>
+                <property name="maxWait" value="${druid.db.maxWait}"/>
+                <property name="timeBetweenEvictionRunsMillis" value="${druid.db.timeBetweenEvictionRunsMillis}"/>
+                <property name="minEvictableIdleTimeMillis" value="${druid.db.minEvictableIdleTimeMillis}"/>
+                <property name="validationQuery" value="${druid.db.validationQuery}"/>
+                <property name="testWhileIdle" value="${druid.db.testWhileIdle}"/>
+                <property name="testOnBorrow" value="${druid.db.testOnBorrow}"/>
+                <property name="testOnReturn" value="${druid.db.testOnReturn}"/>
+                <property name="connectionInitSqls" value="set names utf8mb4;"/>
+                <property name="filters" value="${druid.db.filters}"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- 配置mango对象 -->
+    <bean id="mango" class="org.jfaster.mango.operator.Mango" factory-method="newInstance">
+        <property name="dataSourceFactories">
+            <list>
+                <ref bean="dsf"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 配置扫描使用@DB注解修饰的DAO类 -->
+    <bean class="org.jfaster.mango.plugin.spring.MangoDaoScanner">
+        <property name="packages">
+            <list>
+                <!-- 扫描包名 -->
+                <value>com.chuanyunbang.crawer.dao</value>
+            </list>
+        </property>
+    </bean>
+
+</beans>

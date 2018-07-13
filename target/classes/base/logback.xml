@@ -1,0 +1,65 @@
+<configuration debug="false" scan="true" scanPeriod="30 minutes">
+    <contextName>test</contextName>
+    <property name="serviceName" value="chuan-yun-bang"/>
+
+    <property name="FILE_PATTERN"
+              value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [${serviceName}] [%X{logId}] [%X{uri}] [%thread] [%-5level] - %msg%n"/>
+
+    <!-- 存放日志文件路径 -->
+    <property name="Log_Home" value="/Users/luffy/chuanyunbang/weixin/logs"/>
+
+    <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${Log_Home}/we_chat_data.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>
+                ${Log_Home}/archive/we_chat_data.%d{yyyy-MM-dd}.%i.log.gz
+            </FileNamePattern>
+            <MaxHistory>5</MaxHistory>
+            <TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <MaxFileSize>400MB</MaxFileSize>
+            </TimeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>${FILE_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="file_fileAsync" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>1024</queueSize>
+        <appender-ref ref="fileAppender"/>
+    </appender>
+
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${FILE_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+
+    <logger name="chuanyunbangLogger" level="debug" additivity="false">
+        <appender-ref ref="file_fileAsync"/>
+    </logger>
+
+
+    <logger name="com.yzb" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="file_fileAsync"/>
+    </logger>
+
+    <logger name="org.springframework" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="file_fileAsync"/>
+    </logger>
+
+
+    <logger name="org.apache" level="INFO" additivity="false">
+        <appender-ref ref="file_fileAsync"/>
+    </logger>
+    <logger name="org.jfaster.mango.annotation" level="debug" additivity="false"/>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>
