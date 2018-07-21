@@ -20,8 +20,8 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 --  Table structure for `wechat_data`
 -- ----------------------------
-DROP TABLE IF EXISTS `wechat_data1`;
-CREATE TABLE `wechat_data1` (
+DROP TABLE IF EXISTS `wechat_data`;
+CREATE TABLE `wechat_data` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tel_nums` varchar(256) DEFAULT NULL,
   `identity` tinyint(1) DEFAULT NULL,

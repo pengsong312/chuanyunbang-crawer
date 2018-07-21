@@ -59,6 +59,8 @@ public class LoadFileDataServiceImpl implements LoadFileDataService {
                                     int id = weChatDataDao.insertAnalyzeResult(ParamUtils.covertWeChatDataToWeChatPo(weChatData));
                                 }
                             });
+
+
                         }
                         msg = new StringBuilder();
                     }
